@@ -6,7 +6,7 @@ intent review on PR #11 (run `prd-01-link-store-and-http-api-d68d`, commit
 only because one criterion could not pass: zurdo 1.30.1 does not unescape `\"`
 inside an `[http:] contains` needle, so
 `contains "\"slug\":\"zurdo\""` searched for literal backslashes, though the
-live body did contain `"slug":"zurdo"` (`lessons/lesson-218df785.md`).
+live body did contain `"slug":"zurdo"` (`lessons/lesson-9aedb6c4.md`).
 
 This follow-up re-proves req-seed's list check with a hint that can pass. The
 behavior was built in the phase 1 run, so the task is expected to pass at

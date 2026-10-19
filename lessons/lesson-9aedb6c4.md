@@ -3,11 +3,12 @@ schema: 1
 match:
   hint_types:
     - http
+  command_head: curl
 source:
   kind: IntentReview
-  prd_slug: prd-01-link-store-and-http-api
+  prd_slug: prd-01-link-store-and-http-api-d68d
   task_id: task-03
-  trail_path: docs/shortlink/prds/prd-01-link-store-and-http-api.trail.md
+  followup_path: docs/shortlink/prds/prd-01-link-store-and-http-api-followup.md
 created_at: 2026-10-19T00:00:00Z
 ---
 
