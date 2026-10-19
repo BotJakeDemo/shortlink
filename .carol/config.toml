@@ -10,8 +10,8 @@ initiatives = "docs"
 # reports), and the users whose `carol:accepted` label or approving review
 # counts at a gate. The App's private key path is in CAROL_APP_KEY.
 [identity]
-app_id = 0          # filled in once the BotJakeDemo Carol App is registered
-installation_id = 0
+app_id = 5377962          # CarolThePM (carolthepm[bot])
+installation_id = 172951755
 acceptors = [344686020]   # BotJakeDemo
 
 # Mechanical triage: `carol triage` labels issues whose body names these paths.

@@ -10,3 +10,4 @@
 
 /shortlink
 *.test
+/.envrc
