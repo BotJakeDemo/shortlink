@@ -1,13 +1,25 @@
-# zurdo run state is local; only the per-repo config is shared.
-/.zurdo/*
-!/.zurdo/config.toml
+# For the demo, .zurdo/, .carol/ and .claude/ are committed whole, so every
+# zurdo run's state (prd.json, run-diff.patch, iterations, reports) lands in
+# its run pull request. Only what would break the loop, or is a machine-local
+# cache, stays out:
 
-# zurdo-installed skill copies; `zurdo skills install --all` rewrites them
-/.claude/
+# zurdo: run lock, Vela's socket, atomic-write temp files
+/.zurdo/lock
+/.zurdo/vela/
+/.zurdo/**/*.lock
+/.zurdo/**/*.tmp
+# zurdo: structural and retrieval indexes, rebuilt per machine (large, binary)
+/.zurdo/lumen/
+/.zurdo/pyxis/
 
-# carol specify/run work in a worktree per phase
+# carol: per-phase git worktrees (nested checkouts can't be committed)
 /.carol/worktrees/
+# carol: an agent session's messages to the tick; read once, never committed
+/.carol/outbox.json
+/.carol/handoff.md
+
+# per-machine environment (CAROL_APP_KEY)
+/.envrc
 
 /shortlink
 *.test
-/.envrc
