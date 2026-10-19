@@ -1,7 +1,5 @@
 # PRD: Phase 1 — link store and HTTP API
 
-<!-- zurdo:scaffold unreviewed — run the zurdo-prd-author skill before zurdo run -->
-
 `shortlink serve` runs an HTTP API that creates, lists, reads and resolves
 short links, persisted to a JSON file. Source: `docs/shortlink/scope.md`,
 Phase 1. Three tasks: the store (`internal/store`), the routes
@@ -28,7 +26,8 @@ Keep the exported signatures as they are.
 
 - The data file is a JSON array of link objects, e.g.
   `[{"slug":"zurdo","url":"https://github.com/ElOrlis/zurdo"}]`. `Link` stays
-  exactly `{slug, url}` for this phase.
+  exactly `{slug, url}` for this phase (design §4: fields arrive with the
+  phase that observes them).
 - A slug must match `^[a-z0-9-]{3,32}$` (`docs/shortlink/design/shortlink.md` §4).
   A generated slug is 6 lowercase letters/digits and must not collide with an
   existing one.

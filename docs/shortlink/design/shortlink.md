@@ -51,7 +51,10 @@ Packages, by layer:
 
 - `internal/store` — `Store`, an in-memory map of slug → `Link` guarded by a
   mutex and persisted to one JSON file (write to a temp file, then rename).
-  `Link` is `{slug, url, created_at, clicks}`.
+  `Link` is `{slug, url}` in phase 1. Fields arrive with the phase that
+  observes them: phase 3 adds `clicks` and `last_clicked_at`. There is no
+  `created_at`, because no phase reads or checks it (amended 2026-10-19 with
+  the maintainer, on the phase 1 PRD review).
 - `internal/server` — an `http.Handler` over a `Store`. The API lives under
   `/api/links`; a bare `/{slug}` redirects.
 - `internal/client` — a small HTTP client for the API, used by the CLI.
@@ -150,6 +153,8 @@ and the CLI.
 
 ### Surface
 
+- `Link` gains `clicks` (0 for a link loaded without it) and `last_clicked_at`
+  (null until the first redirect), both persisted with the link (§4).
 - `GET /{slug}` increments the link's `clicks` before redirecting; the count is
   persisted with the link. Concurrent redirects never lose a count.
 - `GET /api/links/{slug}/stats` → `200` and `{"slug": "...", "clicks": N,

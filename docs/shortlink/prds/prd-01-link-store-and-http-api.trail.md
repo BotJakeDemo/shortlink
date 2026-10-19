@@ -1,4 +1,4 @@
-> reviewed by the `zurdo-prd-author` skill (phase-01-h2, 2026-10-19) from the `zurdo scaffold` draft of `docs/shortlink/design/shortlink.md` §Phase 1 — verdict pending one open question (below); the scaffold marker stays until it is answered.
+> reviewed by the `zurdo-prd-author` skill (phase-01-h2, 2026-10-19) from the `zurdo scaffold` draft of `docs/shortlink/design/shortlink.md` §Phase 1 — verdict `✓ READY TO RUN`, the scaffold marker removed once the maintainer answered the `Link`-shape question (below).
 
 # Trail: prd-01-link-store-and-http-api
 
@@ -20,9 +20,13 @@
 - **Accepted and unverified: the mutex and the temp-file-and-rename write.** No phase-1 criterion can observe a lost write or a torn file cheaply. Phase 3's 100-concurrent-redirects test under `-race` is where concurrency is proven.
 - **Effort keys** `medium`/`medium`/`low` (confirmed). `.zurdo/config.toml` maps all three keys for every provider.
 
-## Open question (blocks the ready verdict)
+## Lessons written
 
-- **`Link` shape vs design §4.** The PRD pins `Link` to exactly `{slug, url}`. Design §4, decided with the maintainer, says `Link` is `{slug, url, created_at, clicks}`. The draft's only reason was that `TestStoreReload` compares with `reflect.DeepEqual`. Recommended: keep `{slug, url}` in phase 1, and amend §4 so that fields arrive with the phase that observes them: `clicks` (and phase 3's `last_clicked_at`) in phase 3, with `created_at` dropped because no phase reads it. If the maintainer wants `created_at` now instead, task-01 gains a requirement that `Create` stamps it and that it survives a reload. `TestStoreReload` then compares slug and URL rather than whole structs, and `testdata/seed.json` carries timestamps.
+- `lessons/lesson-3634089f.md` (task-03): `zurdo analyze` flags `test "$(…)" = "…"` as a no-op shell hint, and `… | grep -qx '…'` replaces it. This is the only correction from this review that transfers to other PRDs. The other decisions above are scope calls and stay in this trail.
+
+## Resolved question
+
+- **`Link` shape vs design §4** (resolved 2026-10-19, BotJakeDemo took the recommendation on PR #5). The PRD pins `Link` to exactly `{slug, url}`, which the original §4 contradicted with `{slug, url, created_at, clicks}`. Decision: keep `{slug, url}` in phase 1. Design §4 is amended in the same commit so that fields arrive with the phase that observes them: phase 3's Surface now adds `clicks` and `last_clicked_at`, and `created_at` is dropped because no phase reads or checks it. Every phase-1 criterion stands as drafted, and `TestStoreReload` keeps its `reflect.DeepEqual` comparison.
 
 ## Pre-authored tests
 
