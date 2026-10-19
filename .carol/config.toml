@@ -1,0 +1,24 @@
+# .carol/config.toml — Carol's per-repo configuration.
+
+[tracker]
+repo = "BotJakeDemo/shortlink"
+
+[paths]
+initiatives = "docs"
+
+# The GitHub App Carol writes as (proposals, PRD and run pull requests,
+# reports), and the users whose `carol:accepted` label or approving review
+# counts at a gate. The App's private key path is in CAROL_APP_KEY.
+[identity]
+app_id = 0          # filled in once the BotJakeDemo Carol App is registered
+installation_id = 0
+acceptors = [344686020]   # BotJakeDemo
+
+# Mechanical triage: `carol triage` labels issues whose body names these paths.
+[triage.area_globs]
+docs = ["docs/**", "README.md"]
+cli = ["cmd/**"]
+server = ["internal/server/**"]
+store = ["internal/store/**"]
+client = ["internal/client/**"]
+tooling = ["scripts/**", ".zurdo/**", ".carol/**"]

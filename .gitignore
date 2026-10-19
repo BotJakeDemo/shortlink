@@ -1,0 +1,12 @@
+# zurdo run state is local; only the per-repo config is shared.
+/.zurdo/*
+!/.zurdo/config.toml
+
+# zurdo-installed skill copies; `zurdo skills install --all` rewrites them
+/.claude/
+
+# carol specify/run work in a worktree per phase
+/.carol/worktrees/
+
+/shortlink
+*.test
