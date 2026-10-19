@@ -1,0 +1,609 @@
+{
+  "schema_version": 1,
+  "prd_path": "docs/shortlink/prds/prd-01-link-store-and-http-api.md",
+  "prd_hash": "622111d8f1890490b9c88b72b343be39bf026e41",
+  "started_at": "2026-10-19T08:31:49.304950370Z",
+  "last_updated": "2026-10-19T08:34:28.430443628Z",
+  "tasks": {
+    "task-01": {
+      "status": "passed",
+      "attempts": 1,
+      "passed_at": "2026-10-19T08:32:18.789104983Z",
+      "iterations": [
+        {
+          "attempt": 1,
+          "started_at": "2026-10-19T08:31:50.129721755Z",
+          "ended_at": "2026-10-19T08:32:18.789104983Z",
+          "model": "claude-sonnet-5-5",
+          "agent_exit_code": 0,
+          "agent_stdout_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-01-1.out",
+          "agent_stderr_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-01-1.err",
+          "agent_stdout_bytes": 41154,
+          "agent_stderr_bytes": 0,
+          "tokens_in": 85250,
+          "tokens_out": 2616,
+          "tokens_cache_write": 17911,
+          "tokens_cache_read": 67333,
+          "premium_requests": null,
+          "cost_usd_est": 0.1045,
+          "timed_out": false,
+          "criteria_results": [
+            {
+              "hint": "shell: go test -tags=preauthored -run '^TestStoreCreate$' -count=1 ./internal/store/",
+              "passed": true,
+              "duration_ms": 253,
+              "exit_code": 0,
+              "stdout_truncated": "ok  \tgithub.com/BotJakeDemo/shortlink/internal/store\t0.006s\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 60,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: go test -tags=preauthored -run '^TestStore(OpenMissing|OpenUnreadable|Reload)$' -count=1 ./internal/store/",
+              "passed": true,
+              "duration_ms": 234,
+              "exit_code": 0,
+              "stdout_truncated": "ok  \tgithub.com/BotJakeDemo/shortlink/internal/store\t0.006s\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 60,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "no-grep: //go:build preauthored in internal/store/preauthored_task_01_test.go",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": null,
+              "stderr_truncated": null,
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": true
+            }
+          ],
+          "frozen_violations": [],
+          "out_of_tree_refs": [
+            "referenced a path outside the repo root: //"
+          ]
+        }
+      ],
+      "preflight_results": [
+        {
+          "criterion": "Create validates URLs and slugs against the pattern and its length bounds, rejects taken slugs, generates 6-character slugs and stores nothing on rejection",
+          "hint": "shell: go test -tags=preauthored -run '^TestStoreCreate$' -count=1 ./internal/store/",
+          "passed": false
+        },
+        {
+          "criterion": "a missing file opens empty, an unreadable or malformed file errors, and a saved file reloads to the same sorted links",
+          "hint": "shell: go test -tags=preauthored -run '^TestStore(OpenMissing|OpenUnreadable|Reload)$' -count=1 ./internal/store/",
+          "passed": false
+        },
+        {
+          "criterion": "the pre-authored store tests are no longer build-tagged",
+          "hint": "no-grep: //go:build preauthored in internal/store/preauthored_task_01_test.go",
+          "passed": false
+        }
+      ]
+    },
+    "task-02": {
+      "status": "passed",
+      "attempts": 1,
+      "passed_at": "2026-10-19T08:32:52.752262323Z",
+      "iterations": [
+        {
+          "attempt": 1,
+          "started_at": "2026-10-19T08:32:20.442986102Z",
+          "ended_at": "2026-10-19T08:32:52.752262323Z",
+          "model": "claude-sonnet-5-5",
+          "agent_exit_code": 0,
+          "agent_stdout_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-02-1.out",
+          "agent_stderr_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-02-1.err",
+          "agent_stdout_bytes": 45167,
+          "agent_stderr_bytes": 0,
+          "tokens_in": 147826,
+          "tokens_out": 1928,
+          "tokens_cache_write": 18544,
+          "tokens_cache_read": 129272,
+          "premium_requests": null,
+          "cost_usd_est": 0.1064,
+          "timed_out": false,
+          "criteria_results": [
+            {
+              "hint": "shell: go test -tags=preauthored -run '^TestServerRoutes$' -count=1 ./internal/server/",
+              "passed": true,
+              "duration_ms": 443,
+              "exit_code": 0,
+              "stdout_truncated": "ok  \tgithub.com/BotJakeDemo/shortlink/internal/server\t0.013s\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 61,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: go test -tags=preauthored -run '^TestServer(List|CreatePersists)$' -count=1 ./internal/server/",
+              "passed": true,
+              "duration_ms": 499,
+              "exit_code": 0,
+              "stdout_truncated": "ok  \tgithub.com/BotJakeDemo/shortlink/internal/server\t0.009s\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 61,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "no-grep: //go:build preauthored in internal/server/preauthored_task_02_test.go",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": null,
+              "stderr_truncated": null,
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": true
+            }
+          ],
+          "frozen_violations": [],
+          "out_of_tree_refs": [
+            "referenced a path outside the repo root: //",
+            "referenced a path outside the repo root: /healthz\",",
+            "referenced a path outside the repo root: /api/links\",",
+            "referenced a path outside the repo root: /api/links/{slug}\",",
+            "referenced a path outside the repo root: /{slug}\","
+          ]
+        }
+      ],
+      "preflight_results": [
+        {
+          "criterion": "every route returns its specified status, body and Location under httptest, with JSON content type and `{\"error\"}` bodies on API errors",
+          "hint": "shell: go test -tags=preauthored -run '^TestServerRoutes$' -count=1 ./internal/server/",
+          "passed": false
+        },
+        {
+          "criterion": "the list is a sorted JSON array, empty when the data file is missing, and API-created links survive a reopen",
+          "hint": "shell: go test -tags=preauthored -run '^TestServer(List|CreatePersists)$' -count=1 ./internal/server/",
+          "passed": false
+        },
+        {
+          "criterion": "the pre-authored server tests are no longer build-tagged",
+          "hint": "no-grep: //go:build preauthored in internal/server/preauthored_task_02_test.go",
+          "passed": false
+        }
+      ]
+    },
+    "task-03": {
+      "status": "failed",
+      "attempts": 3,
+      "passed_at": null,
+      "iterations": [
+        {
+          "attempt": 1,
+          "started_at": "2026-10-19T08:32:54.863914877Z",
+          "ended_at": "2026-10-19T08:33:30.365146525Z",
+          "model": "claude-haiku-5-5",
+          "agent_exit_code": 0,
+          "agent_stdout_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-03-1.out",
+          "agent_stderr_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-03-1.err",
+          "agent_stdout_bytes": 95107,
+          "agent_stderr_bytes": 0,
+          "tokens_in": 249752,
+          "tokens_out": 5091,
+          "tokens_cache_write": 26596,
+          "tokens_cache_read": 223142,
+          "premium_requests": null,
+          "cost_usd_est": 0.0101,
+          "timed_out": false,
+          "criteria_results": [
+            {
+              "hint": "shell: bin=\"$(mktemp -d)/shortlink\" && go build -o \"$bin\" ./cmd/shortlink && { out=\"$(timeout 10 \"$bin\" serve --addr 127.0.0.1:0 --data testdata 2>&1)\"; code=$?; test \"$code\" -eq 1 && printf '%s' \"$out\" | grep -q testdata; }",
+              "passed": true,
+              "duration_ms": 581,
+              "exit_code": 0,
+              "stdout_truncated": "",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/healthz -> 200 contains \"ok\"",
+              "passed": true,
+              "duration_ms": 1,
+              "exit_code": null,
+              "stdout_truncated": "ok",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 2,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+              "passed": false,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "[{\"slug\":\"carol\",\"url\":\"https://github.com/ElOrlis/carol\"},{\"slug\":\"zurdo\",\"url\":\"https://github.com/ElOrlis/zurdo\"}]\n",
+              "stderr_truncated": "status 200 matched but body did not contain \"\\\"slug\\\":\\\"zurdo\\\"\"",
+              "timed_out": false,
+              "stdout_bytes": 118,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links/carol -> 200 contains \"https://github.com/ElOrlis/carol\"",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "{\"slug\":\"carol\",\"url\":\"https://github.com/ElOrlis/carol\"}\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 58,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links/nope -> 404",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "{\"error\":\"link not found\"}\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 27,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\\n' http://127.0.0.1:8787/zurdo | grep -qx '302 https://github.com/ElOrlis/zurdo'",
+              "passed": true,
+              "duration_ms": 16,
+              "exit_code": 0,
+              "stdout_truncated": "",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: test -z \"$(gofmt -l .)\" && go vet ./... && go vet -tags=preauthored ./... && go test -tags=preauthored -count=1 ./...",
+              "passed": true,
+              "duration_ms": 1009,
+              "exit_code": 0,
+              "stdout_truncated": "ok  \tgithub.com/BotJakeDemo/shortlink/cmd/shortlink\t0.007s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/server\t0.015s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/store\t0.008s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/version\t0.003s\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 242,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            }
+          ],
+          "frozen_violations": [],
+          "out_of_tree_refs": [
+            "referenced a path outside the repo root: /tmp/serve_patch.py",
+            "referenced a path outside the repo root: //",
+            "referenced a path outside the repo root: /healthz",
+            "referenced a path outside the repo root: /api/links",
+            "referenced a path outside the repo root: /api/links/carol",
+            "referenced a path outside the repo root: /api/links/nope",
+            "referenced a path outside the repo root: /zurdo;",
+            "referenced a path outside the repo root: /dev/null"
+          ],
+          "failure_fingerprint": "sha256:03e293a03de1d8927a1c62f557687ad75f34f74033f7849efc7e81ed35ed8abf"
+        },
+        {
+          "attempt": 2,
+          "started_at": "2026-10-19T08:33:32.015884547Z",
+          "ended_at": "2026-10-19T08:33:52.654594752Z",
+          "model": "claude-haiku-5-5",
+          "agent_exit_code": 0,
+          "agent_stdout_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-03-2.out",
+          "agent_stderr_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-03-2.err",
+          "agent_stdout_bytes": 55318,
+          "agent_stderr_bytes": 0,
+          "tokens_in": 133923,
+          "tokens_out": 2571,
+          "tokens_cache_write": 22178,
+          "tokens_cache_read": 111737,
+          "premium_requests": null,
+          "cost_usd_est": 0.0068,
+          "timed_out": false,
+          "criteria_results": [
+            {
+              "hint": "shell: bin=\"$(mktemp -d)/shortlink\" && go build -o \"$bin\" ./cmd/shortlink && { out=\"$(timeout 10 \"$bin\" serve --addr 127.0.0.1:0 --data testdata 2>&1)\"; code=$?; test \"$code\" -eq 1 && printf '%s' \"$out\" | grep -q testdata; }",
+              "passed": true,
+              "duration_ms": 520,
+              "exit_code": 0,
+              "stdout_truncated": "",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/healthz -> 200 contains \"ok\"",
+              "passed": true,
+              "duration_ms": 1,
+              "exit_code": null,
+              "stdout_truncated": "ok",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 2,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+              "passed": false,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "[{\"slug\":\"carol\",\"url\":\"https://github.com/ElOrlis/carol\"},{\"slug\":\"zurdo\",\"url\":\"https://github.com/ElOrlis/zurdo\"}]\n",
+              "stderr_truncated": "status 200 matched but body did not contain \"\\\"slug\\\":\\\"zurdo\\\"\"",
+              "timed_out": false,
+              "stdout_bytes": 118,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links/carol -> 200 contains \"https://github.com/ElOrlis/carol\"",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "{\"slug\":\"carol\",\"url\":\"https://github.com/ElOrlis/carol\"}\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 58,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links/nope -> 404",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "{\"error\":\"link not found\"}\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 27,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\\n' http://127.0.0.1:8787/zurdo | grep -qx '302 https://github.com/ElOrlis/zurdo'",
+              "passed": true,
+              "duration_ms": 12,
+              "exit_code": 0,
+              "stdout_truncated": "",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: test -z \"$(gofmt -l .)\" && go vet ./... && go vet -tags=preauthored ./... && go test -tags=preauthored -count=1 ./...",
+              "passed": true,
+              "duration_ms": 858,
+              "exit_code": 0,
+              "stdout_truncated": "ok  \tgithub.com/BotJakeDemo/shortlink/cmd/shortlink\t0.006s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/server\t0.013s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/store\t0.008s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/version\t0.003s\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 242,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            }
+          ],
+          "frozen_violations": [],
+          "out_of_tree_refs": [
+            "referenced a path outside the repo root: /dev/null"
+          ],
+          "failure_fingerprint": "sha256:03e293a03de1d8927a1c62f557687ad75f34f74033f7849efc7e81ed35ed8abf"
+        },
+        {
+          "attempt": 3,
+          "started_at": "2026-10-19T08:33:54.079190555Z",
+          "ended_at": "2026-10-19T08:34:26.248905611Z",
+          "model": "claude-haiku-5-5",
+          "agent_exit_code": 0,
+          "agent_stdout_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-03-3.out",
+          "agent_stderr_path": "/home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-03-3.err",
+          "agent_stdout_bytes": 74503,
+          "agent_stderr_bytes": 0,
+          "tokens_in": 173498,
+          "tokens_out": 4923,
+          "tokens_cache_write": 24973,
+          "tokens_cache_read": 148515,
+          "premium_requests": null,
+          "cost_usd_est": 0.0089,
+          "timed_out": false,
+          "criteria_results": [
+            {
+              "hint": "shell: bin=\"$(mktemp -d)/shortlink\" && go build -o \"$bin\" ./cmd/shortlink && { out=\"$(timeout 10 \"$bin\" serve --addr 127.0.0.1:0 --data testdata 2>&1)\"; code=$?; test \"$code\" -eq 1 && printf '%s' \"$out\" | grep -q testdata; }",
+              "passed": true,
+              "duration_ms": 673,
+              "exit_code": 0,
+              "stdout_truncated": "",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/healthz -> 200 contains \"ok\"",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "ok",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 2,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+              "passed": false,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "[{\"slug\":\"carol\",\"url\":\"https://github.com/ElOrlis/carol\"},{\"slug\":\"zurdo\",\"url\":\"https://github.com/ElOrlis/zurdo\"}]\n",
+              "stderr_truncated": "status 200 matched but body did not contain \"\\\"slug\\\":\\\"zurdo\\\"\"",
+              "timed_out": false,
+              "stdout_bytes": 118,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links/carol -> 200 contains \"https://github.com/ElOrlis/carol\"",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "{\"slug\":\"carol\",\"url\":\"https://github.com/ElOrlis/carol\"}\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 58,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links/nope -> 404",
+              "passed": true,
+              "duration_ms": 0,
+              "exit_code": null,
+              "stdout_truncated": "{\"error\":\"link not found\"}\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 27,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\\n' http://127.0.0.1:8787/zurdo | grep -qx '302 https://github.com/ElOrlis/zurdo'",
+              "passed": true,
+              "duration_ms": 14,
+              "exit_code": 0,
+              "stdout_truncated": "",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 0,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            },
+            {
+              "hint": "shell: test -z \"$(gofmt -l .)\" && go vet ./... && go vet -tags=preauthored ./... && go test -tags=preauthored -count=1 ./...",
+              "passed": true,
+              "duration_ms": 1456,
+              "exit_code": 0,
+              "stdout_truncated": "ok  \tgithub.com/BotJakeDemo/shortlink/cmd/shortlink\t0.009s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/server\t0.015s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/store\t0.009s\nok  \tgithub.com/BotJakeDemo/shortlink/internal/version\t0.003s\n",
+              "stderr_truncated": "",
+              "timed_out": false,
+              "stdout_bytes": 242,
+              "stderr_bytes": 0,
+              "failure_reason": null,
+              "evidence_modified": null
+            }
+          ],
+          "frozen_violations": [],
+          "out_of_tree_refs": [
+            "referenced a path outside the repo root: /home/linuxbrew/.linuxbrew/Cellar/zurdo/1.30.1/",
+            "referenced a path outside the repo root: /dev/null"
+          ],
+          "failure_fingerprint": "sha256:03e293a03de1d8927a1c62f557687ad75f34f74033f7849efc7e81ed35ed8abf"
+        }
+      ],
+      "preflight_results": [
+        {
+          "criterion": "serve with an unreadable data file exits 1 and names the path",
+          "hint": "shell: bin=\"$(mktemp -d)/shortlink\" && go build -o \"$bin\" ./cmd/shortlink && { out=\"$(timeout 10 \"$bin\" serve --addr 127.0.0.1:0 --data testdata 2>&1)\"; code=$?; test \"$code\" -eq 1 && printf '%s' \"$out\" | grep -q testdata; }",
+          "passed": false
+        },
+        {
+          "criterion": "the live dev server is healthy",
+          "hint": "http: GET http://127.0.0.1:8787/healthz -> 200 contains \"ok\"",
+          "passed": false
+        },
+        {
+          "criterion": "the live list carries the zurdo seed link",
+          "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+          "passed": false
+        },
+        {
+          "criterion": "the live server reads the carol seed link and 404s an unknown slug",
+          "hint": "http: GET http://127.0.0.1:8787/api/links/carol -> 200 contains \"https://github.com/ElOrlis/carol\"; http: GET http://127.0.0.1:8787/api/links/nope -> 404",
+          "passed": false
+        },
+        {
+          "criterion": "the live server redirects /zurdo without following it",
+          "hint": "shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\\n' http://127.0.0.1:8787/zurdo | grep -qx '302 https://github.com/ElOrlis/zurdo'",
+          "passed": false
+        },
+        {
+          "criterion": "the tree is gofmt-clean, vets clean and the full suite passes with pre-authored tests included",
+          "hint": "shell: test -z \"$(gofmt -l .)\" && go vet ./... && go vet -tags=preauthored ./... && go test -tags=preauthored -count=1 ./...",
+          "passed": true
+        }
+      ]
+    }
+  },
+  "completion_gate": null,
+  "side_calls": [
+    {
+      "role": "probe",
+      "task_id": null,
+      "attempt": null,
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "tokens_in": 25332,
+      "tokens_out": 112,
+      "tokens_cache_write": 11526,
+      "tokens_cache_read": 13804,
+      "cost_usd_est": 0.0025
+    },
+    {
+      "role": "probe",
+      "task_id": null,
+      "attempt": null,
+      "provider": "anthropic",
+      "model": "claude-sonnet-5-5",
+      "tokens_in": 24568,
+      "tokens_out": 87,
+      "tokens_cache_write": 11542,
+      "tokens_cache_read": 13024,
+      "cost_usd_est": 0.0483
+    }
+  ]
+}

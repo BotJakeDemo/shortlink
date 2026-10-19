@@ -9,3 +9,10 @@ Go 1.22, standard library only. One binary, `cmd/shortlink`; packages live under
   `scripts/devserver.sh` from the newest tree. Don't start another server on that port.
 - Seed data for the dev server lives in `testdata/seed.json`.
 - `docs/shortlink/scope.md` is the source of truth for the initiative; GitHub issues are projections of it.
+
+## Carol review sessions (H2/H3)
+
+When a review writes a follow-up PRD (`docs/shortlink/prds/*-followup.md`) or
+`lessons/*.md` files, **commit them on the pull request's branch before
+ending**. Carol runs the follow-up from the branch, so an uncommitted follow-up
+is never run. Only `.carol/outbox.json` and `.carol/handoff.md` stay uncommitted.

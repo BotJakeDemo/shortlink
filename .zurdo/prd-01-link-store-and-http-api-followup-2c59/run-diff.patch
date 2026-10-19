@@ -1,0 +1,77 @@
+# zurdo run-diff
+# baseline tree: 52b2ed5a1ae3d35d963b8ed905f4697eb342c491
+# baseline captured: 2026-10-19T08:44:13.600500228+00:00
+# Scope: changes made to the working tree after that capture. A resumed
+# run recaptures its baseline when it resumes, so anything an earlier pass
+# already wrote is inside the baseline and absent from this patch.
+#
+diff --git a/.zurdo/prd-01-link-store-and-http-api-followup-2c59/baseline b/.zurdo/prd-01-link-store-and-http-api-followup-2c59/baseline
+new file mode 100644
+index 0000000..f4a73d8
+--- /dev/null
++++ b/.zurdo/prd-01-link-store-and-http-api-followup-2c59/baseline
+@@ -0,0 +1,8 @@
++{
++  "run_tree": "52b2ed5a1ae3d35d963b8ed905f4697eb342c491",
++  "dirty": true,
++  "captured_at": "2026-10-19T08:44:13.600500228Z",
++  "git_version": "git version 2.53.0",
++  "task_tree": null,
++  "task_id": null
++}
+diff --git a/.zurdo/prd-01-link-store-and-http-api-followup-2c59/prd.json b/.zurdo/prd-01-link-store-and-http-api-followup-2c59/prd.json
+index 126ed29..8bfc56a 100644
+--- a/.zurdo/prd-01-link-store-and-http-api-followup-2c59/prd.json
++++ b/.zurdo/prd-01-link-store-and-http-api-followup-2c59/prd.json
+@@ -3,14 +3,40 @@
+   "prd_path": "docs/shortlink/prds/prd-01-link-store-and-http-api-followup.md",
+   "prd_hash": "8ed2bd36fef28176790596045bfcebe9c70740ff",
+   "started_at": "2026-10-19T08:44:13.595450431Z",
+-  "last_updated": "2026-10-19T08:44:13.598285137Z",
++  "last_updated": "2026-10-19T08:44:13.649185068Z",
+   "tasks": {
+     "task-01": {
+-      "status": "pending",
++      "status": "passed",
+       "attempts": 0,
+-      "passed_at": null,
++      "passed_at": "2026-10-19T08:44:13.649183490Z",
+       "iterations": [],
+-      "preflight_results": []
++      "preflight_results": [
++        {
++          "criterion": "the live list carries the zurdo seed link",
++          "hint": "shell: curl -sf http://127.0.0.1:8787/api/links | grep -qF '\"slug\":\"zurdo\"'",
++          "passed": true
++        },
++        {
++          "criterion": "the live list answers 200",
++          "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"https://github.com/ElOrlis/zurdo\"",
++          "passed": true
++        }
++      ],
++      "preflight_pass": {
++        "evaluated_at": "2026-10-19T08:44:13.642674278Z",
++        "results": [
++          {
++            "criterion": "the live list carries the zurdo seed link",
++            "hint": "shell: curl -sf http://127.0.0.1:8787/api/links | grep -qF '\"slug\":\"zurdo\"'",
++            "passed": true
++          },
++          {
++            "criterion": "the live list answers 200",
++            "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"https://github.com/ElOrlis/zurdo\"",
++            "passed": true
++          }
++        ]
++      }
+     }
+   },
+   "completion_gate": null,
+diff --git a/.zurdo/prd-01-link-store-and-http-api-followup-2c59/progress.log b/.zurdo/prd-01-link-store-and-http-api-followup-2c59/progress.log
+index b1687f0..86b5852 100644
+--- a/.zurdo/prd-01-link-store-and-http-api-followup-2c59/progress.log
++++ b/.zurdo/prd-01-link-store-and-http-api-followup-2c59/progress.log
+@@ -1 +1,2 @@
+ {"event":"run_start","ts":"2026-10-19T08:44:13.600419667Z","prd_hash":"8ed2bd36fef28176790596045bfcebe9c70740ff","resumed":false}
++{"event":"task_status","ts":"2026-10-19T08:44:13.651307162Z","task_id":"task-01","attempt":0,"status":"passed","attempts":0}

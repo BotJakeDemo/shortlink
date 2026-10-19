@@ -1,0 +1,254 @@
+{
+  "report_schema_version": 1,
+  "generated_at": "2026-10-19T08:34:28.469352432Z",
+  "prd_path": "docs/shortlink/prds/prd-01-link-store-and-http-api.md",
+  "prd_hash": "622111d8f1890490b9c88b72b343be39bf026e41",
+  "started_at": "2026-10-19T08:31:49.304950370Z",
+  "ended_at": "2026-10-19T08:34:26.248905611Z",
+  "totals": {
+    "passed": 2,
+    "passed_pending_review": 0,
+    "failed": 1,
+    "blocked_by_dependency": 0,
+    "wall_clock_ms": 149276,
+    "tokens_in": 840149,
+    "tokens_out": 17328,
+    "cost_usd_est": 0.2875,
+    "partial": false,
+    "tokens_partial": false,
+    "breakdown": {
+      "executor": {
+        "tokens_in": 790249,
+        "tokens_out": 17129,
+        "cost_usd_est": 0.2367
+      },
+      "transient": {
+        "tokens_in": null,
+        "tokens_out": null,
+        "cost_usd_est": null
+      },
+      "side_calls": {
+        "tokens_in": 49900,
+        "tokens_out": 199,
+        "cost_usd_est": 0.0508
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "task-01",
+      "title": "JSON-file link store",
+      "category": "Uncategorized",
+      "status": "passed",
+      "attempts_used": 1,
+      "max_attempts": 3,
+      "wall_clock_ms": 28659,
+      "criteria_passed_final": 3,
+      "criteria_total": 3,
+      "tokens_in": 85250,
+      "tokens_out": 2616,
+      "cost_usd_est": 0.1045,
+      "partial": false,
+      "tokens_partial": false,
+      "iterations": [
+        {
+          "attempt": 1,
+          "started_at": "2026-10-19T08:31:50.129721755Z",
+          "ended_at": "2026-10-19T08:32:18.789104983Z",
+          "model": "claude-sonnet-5-5",
+          "criteria_passed": 3,
+          "criteria_total": 3,
+          "failed_hints": [],
+          "summary": "Iteration 1: all criteria passed"
+        }
+      ]
+    },
+    {
+      "id": "task-02",
+      "title": "HTTP routes over the store",
+      "category": "Uncategorized",
+      "status": "passed",
+      "attempts_used": 1,
+      "max_attempts": 3,
+      "wall_clock_ms": 32309,
+      "criteria_passed_final": 3,
+      "criteria_total": 3,
+      "tokens_in": 147826,
+      "tokens_out": 1928,
+      "cost_usd_est": 0.1064,
+      "partial": false,
+      "tokens_partial": false,
+      "iterations": [
+        {
+          "attempt": 1,
+          "started_at": "2026-10-19T08:32:20.442986102Z",
+          "ended_at": "2026-10-19T08:32:52.752262323Z",
+          "model": "claude-sonnet-5-5",
+          "criteria_passed": 3,
+          "criteria_total": 3,
+          "failed_hints": [],
+          "summary": "Iteration 1: all criteria passed"
+        }
+      ]
+    },
+    {
+      "id": "task-03",
+      "title": "serve command, seed data and live checks",
+      "category": "Uncategorized",
+      "status": "failed",
+      "attempts_used": 3,
+      "max_attempts": 3,
+      "wall_clock_ms": 88308,
+      "criteria_passed_final": 6,
+      "criteria_total": 7,
+      "tokens_in": 557173,
+      "tokens_out": 12585,
+      "cost_usd_est": 0.0258,
+      "partial": false,
+      "tokens_partial": false,
+      "iterations": [
+        {
+          "attempt": 1,
+          "started_at": "2026-10-19T08:32:54.863914877Z",
+          "ended_at": "2026-10-19T08:33:30.365146525Z",
+          "model": "claude-haiku-5-5",
+          "criteria_passed": 6,
+          "criteria_total": 7,
+          "failed_hints": [
+            "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\""
+          ],
+          "summary": "Iteration 1: 6/7 criteria passed; failing: http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+          "failed_criteria": [
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\""
+            }
+          ]
+        },
+        {
+          "attempt": 2,
+          "started_at": "2026-10-19T08:33:32.015884547Z",
+          "ended_at": "2026-10-19T08:33:52.654594752Z",
+          "model": "claude-haiku-5-5",
+          "criteria_passed": 6,
+          "criteria_total": 7,
+          "failed_hints": [
+            "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\""
+          ],
+          "summary": "Iteration 2: 6/7 criteria passed; failing: http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+          "failed_criteria": [
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\""
+            }
+          ]
+        },
+        {
+          "attempt": 3,
+          "started_at": "2026-10-19T08:33:54.079190555Z",
+          "ended_at": "2026-10-19T08:34:26.248905611Z",
+          "model": "claude-haiku-5-5",
+          "criteria_passed": 6,
+          "criteria_total": 7,
+          "failed_hints": [
+            "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\""
+          ],
+          "summary": "Iteration 3: 6/7 criteria passed; failing: http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+          "failed_criteria": [
+            {
+              "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\""
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "hotspots": [
+    {
+      "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"\\\"slug\\\":\\\"zurdo\\\"\"",
+      "failure_count": 3,
+      "task_ids": [
+        "task-03"
+      ]
+    }
+  ],
+  "model_usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "iteration_count": 3,
+      "tokens_in": 582505,
+      "tokens_out": 12697,
+      "cost_usd_est": 0.0283
+    },
+    {
+      "provider": "anthropic",
+      "model": "claude-sonnet-5-5",
+      "iteration_count": 2,
+      "tokens_in": 257644,
+      "tokens_out": 4631,
+      "cost_usd_est": 0.2592
+    }
+  ],
+  "stalled": [
+    {
+      "id": "task-03",
+      "reason": "exhausted 3 attempts without improving criteria pass count"
+    }
+  ],
+  "fingerprint_stalls": [
+    {
+      "id": "task-03",
+      "fingerprint": "sha256:03e293a03de1d8927a1c62f557687ad75f34f74033f7849efc7e81ed35ed8abf",
+      "repeat_count": 3
+    }
+  ],
+  "out_of_tree": [
+    {
+      "id": "task-01",
+      "attempt": 1,
+      "refs": [
+        "referenced a path outside the repo root: //"
+      ]
+    },
+    {
+      "id": "task-02",
+      "attempt": 1,
+      "refs": [
+        "referenced a path outside the repo root: //",
+        "referenced a path outside the repo root: /healthz\",",
+        "referenced a path outside the repo root: /api/links\",",
+        "referenced a path outside the repo root: /api/links/{slug}\",",
+        "referenced a path outside the repo root: /{slug}\","
+      ]
+    },
+    {
+      "id": "task-03",
+      "attempt": 1,
+      "refs": [
+        "referenced a path outside the repo root: /tmp/serve_patch.py",
+        "referenced a path outside the repo root: //",
+        "referenced a path outside the repo root: /healthz",
+        "referenced a path outside the repo root: /api/links",
+        "referenced a path outside the repo root: /api/links/carol",
+        "referenced a path outside the repo root: /api/links/nope",
+        "referenced a path outside the repo root: /zurdo;",
+        "referenced a path outside the repo root: /dev/null"
+      ]
+    },
+    {
+      "id": "task-03",
+      "attempt": 2,
+      "refs": [
+        "referenced a path outside the repo root: /dev/null"
+      ]
+    },
+    {
+      "id": "task-03",
+      "attempt": 3,
+      "refs": [
+        "referenced a path outside the repo root: /home/linuxbrew/.linuxbrew/Cellar/zurdo/1.30.1/",
+        "referenced a path outside the repo root: /dev/null"
+      ]
+    }
+  ],
+  "categories": null
+}

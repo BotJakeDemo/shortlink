@@ -1,0 +1,52 @@
+# Task
+
+serve command, seed data and live checks
+
+Add a `serve` subcommand to `cmd/shortlink`. Use the `flag` package for its
+flags, with `--addr` defaulting to `127.0.0.1:8787` and `--data` defaulting to
+`links.json`. It calls `server.New(data)`. If that fails, it prints the error,
+including the data path, to stderr and exits 1. Otherwise it runs
+`http.ListenAndServe(addr, handler)`. Keep whatever `cmd/shortlink` already
+does (e.g. version output), and keep `cmd/shortlink/main_test.go` passing.
+
+Create `testdata/seed.json` in the store's file format (a JSON array of
+`{"slug","url"}` objects) holding the two seed links listed under req-seed.
+
+The live checks run against the dev server that `scripts/devserver.sh` serves
+from the newest tree on `http://127.0.0.1:8787`. Do not start another server
+on that port, and do not modify `scripts/devserver.sh`.
+
+# Acceptance Criteria
+
+- serve with an unreadable data file exits 1 and names the path [shell: bin="$(mktemp -d)/shortlink" && go build -o "$bin" ./cmd/shortlink && { out="$(timeout 10 "$bin" serve --addr 127.0.0.1:0 --data testdata 2>&1)"; code=$?; test "$code" -eq 1 && printf '%s' "$out" | grep -q testdata; }]
+- the live dev server is healthy [http: GET http://127.0.0.1:8787/healthz -> 200 contains "ok"]
+- the live list carries the zurdo seed link [http: GET http://127.0.0.1:8787/api/links -> 200 contains "\"slug\":\"zurdo\""]
+- the live server reads the carol seed link and 404s an unknown slug [http: GET http://127.0.0.1:8787/api/links/carol -> 200 contains "https://github.com/ElOrlis/carol"] [http: GET http://127.0.0.1:8787/api/links/nope -> 404]
+- the live server redirects /zurdo without following it [shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://127.0.0.1:8787/zurdo | grep -qx '302 https://github.com/ElOrlis/zurdo']
+- the tree is gofmt-clean, vets clean and the full suite passes with pre-authored tests included [shell: test -z "$(gofmt -l .)" && go vet ./... && go vet -tags=preauthored ./... && go test -tags=preauthored -count=1 ./...]
+
+# Available Skills
+
+(none)
+
+# Previous Iteration Feedback
+
+The previous iteration produced changes but criteria did not all pass. Failed checks:
+
+- [http: GET http://127.0.0.1:8787/api/links -> 200 contains "\"slug\":\"zurdo\""]
+  stdout: [{"slug":"carol","url":"https://github.com/ElOrlis/carol"},{"slug":"zurdo","url":"https://github.com/ElOrlis/zurdo"}]
+
+  stderr: status 200 matched but body did not contain "\"slug\":\"zurdo\""
+
+## Prior iteration agent narrative (tail)
+
+(source: /home/bob/workspace/utils/demos/zurdo-demo/.carol/worktrees/phase-01/.zurdo/prd-01-link-store-and-http-api-d68d/iterations/task-03-2.out)
+
+ edits (`cmd/shortlink/main.go`, its test, `internal/store/store.go`, `internal/server/server.go`, and `testdata/seed.json`)."}],"container":null,"stop_reason":null,"stop_sequence":null,"stop_details":null,"usage":{"input_tokens":2,"cache_creation_input_tokens":748,"cache_read_input_tokens":35234,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":748},"output_tokens":8,"service_tier":"standard","inference_geo":"global","speed":"standard"},"input_transformations":[],"diagnostics":null,"context_management":null},"parent_tool_use_id":null,"session_id":"f57f6b3f-2cc4-49bc-8b8a-47f643900515","uuid":"2bb9be6e-94e2-4222-bfd3-986989a47dac","timestamp":"2026-10-19T08:33:52.271Z","request_id":"req_011CgBHd9XU7nqftsMn89T7D"}
+{"duration_api_ms":14524,"stop_reason":"end_turn","session_id":"f57f6b3f-2cc4-49bc-8b8a-47f643900515","total_cost_usd":0.006839270000000001,"usage":{"input_tokens":8,"cache_creation_input_tokens":22178,"cache_read_input_tokens":111737,"output_tokens":2571,"output_tokens_details":{"thinking_tokens":816},"server_tool_use":{"web_search_requests":0,"web_fetch_requests":0},"service_tier":"standard","cache_creation":{"ephemeral_1h_input_tokens":22178,"ephemeral_5m_input_tokens":0},"inference_geo":"global","iterations":[{"input_tokens":2,"output_tokens":568,"cache_read_input_tokens":35234,"cache_creation_input_tokens":748,"cache_creation":{"ephemeral_5m_input_tokens":0,"ephemeral_1h_input_tokens":748},"type":"message"}],"speed":"standard","fallback_credit":null},"modelUsage":{"claude-haiku-5-5":{"inputTokens":8,"outputTokens":2571,"cacheReadInputTokens":111737,"cacheCreationInputTokens":22178,"webSearchRequests":0,"costUSD":0.006839270000000001,"contextWindow":1000000,"maxOutputTokens":128000,"thinkingTokens":816,"canonicalModel":"claude-haiku-5-5","provider":"firstParty","costBasis":"list"}},"permission_denials":[],"terminal_reason":"completed","fast_mode_state":"off","fast_mode_disabled_reason":"sdk_opt_in_required","subagent_stats":{"spawned":0,"requested":{"background":0,"foreground":0,"unset":0},"started_in_background":0,"max_depth":0,"spawned_by_subagents":0,"completed":0,"failed":0,"killed":{"parent":0,"user":0,"system":0},"refused":{"depth_limit":0,"concurrency_limit":0,"budget":0},"by_type":{}},"safety_stops":0,"is_error":false,"num_turns":5,"subtype":"success","api_error_status":null,"result":"All six acceptance criteria pass on the current tree. I made no code changes this iteration: the code and seed data from the previous pass already satisfy them.\n\nThe one failure last time was the live check `GET /api/links` looking for `\"slug\":\"zurdo\"`. The server's body does contain that string (`[{\"slug\":\"carol\",...},{\"slug\":\"zurdo\",...}]`), and it matches on re-check. The earlier failure was most likely a transient or stale response from the dev server; I can't confirm that from here. I did not restart or touch the server on port 8787.\n\nChecks run from the worktree:\n- **serve with unreadable data:** `serve --data testdata` exits 1 and prints `shortlink serve: read testdata: read testdata: is a directory`, which names the path. The doubled `read testdata:` comes from the store's existing error wrapping.\n- **Live server:** `/healthz` returns 200 `ok`. `/api/links` includes the zurdo link. `/api/links/carol` returns the carol URL. `/api/links/nope` returns 404. `/zurdo` returns `302 https://github.com/ElOrlis/zurdo` without following it.\n- **Tree hygiene:** `gofmt -l .` is empty, `go vet ./...` and `go vet -tags=preauthored ./...` are clean, and `go test -tags=preauthored -count=1 ./...` passes. The untagged `go test -count=1 ./...` also passes, as CLAUDE.md requires.\n\nThe working tree is unchanged from the previous iteration's uncommitted edits (`cmd/shortlink/main.go`, its test, `internal/store/store.go`, `internal/server/server.go`, and `testdata/seed.json`).","ttft_ms":2557,"type":"result","duration_ms":17887,"uuid":"17ba63bd-f572-4568-af2d-ca8298b7ef46","ttft_stream_ms":1401,"time_to_request_ms":155,"first_content_frame_ms":1401,"queued_turn_count":0,"result_index":0}
+
+Address these failures while keeping previously-passing checks satisfied.
+
+# Instructions
+
+Make the changes needed to satisfy all acceptance criteria. When you believe you are done, exit cleanly.

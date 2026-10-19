@@ -1,5 +1,3 @@
-//go:build preauthored
-
 // Pre-authored evidence for task-02 of
 // docs/shortlink/prds/prd-01-link-store-and-http-api.md. These assertions are
 // fixed; the run implements the routes until they pass.

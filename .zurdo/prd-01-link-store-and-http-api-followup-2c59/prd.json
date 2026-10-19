@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "prd_path": "docs/shortlink/prds/prd-01-link-store-and-http-api-followup.md",
+  "prd_hash": "8ed2bd36fef28176790596045bfcebe9c70740ff",
+  "started_at": "2026-10-19T08:44:13.595450431Z",
+  "last_updated": "2026-10-19T08:44:13.649185068Z",
+  "tasks": {
+    "task-01": {
+      "status": "passed",
+      "attempts": 0,
+      "passed_at": "2026-10-19T08:44:13.649183490Z",
+      "iterations": [],
+      "preflight_results": [
+        {
+          "criterion": "the live list carries the zurdo seed link",
+          "hint": "shell: curl -sf http://127.0.0.1:8787/api/links | grep -qF '\"slug\":\"zurdo\"'",
+          "passed": true
+        },
+        {
+          "criterion": "the live list answers 200",
+          "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"https://github.com/ElOrlis/zurdo\"",
+          "passed": true
+        }
+      ],
+      "preflight_pass": {
+        "evaluated_at": "2026-10-19T08:44:13.642674278Z",
+        "results": [
+          {
+            "criterion": "the live list carries the zurdo seed link",
+            "hint": "shell: curl -sf http://127.0.0.1:8787/api/links | grep -qF '\"slug\":\"zurdo\"'",
+            "passed": true
+          },
+          {
+            "criterion": "the live list answers 200",
+            "hint": "http: GET http://127.0.0.1:8787/api/links -> 200 contains \"https://github.com/ElOrlis/zurdo\"",
+            "passed": true
+          }
+        ]
+      }
+    }
+  },
+  "completion_gate": null,
+  "side_calls": [
+    {
+      "role": "probe",
+      "task_id": null,
+      "attempt": null,
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "tokens_in": 25523,
+      "tokens_out": 112,
+      "tokens_cache_write": 11717,
+      "tokens_cache_read": 13804,
+      "cost_usd_est": 0.0025
+    }
+  ]
+}
