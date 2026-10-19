@@ -1,0 +1,70 @@
+{
+  "report_schema_version": 1,
+  "generated_at": "2026-10-19T08:44:13.671906776Z",
+  "prd_path": "docs/shortlink/prds/prd-01-link-store-and-http-api-followup.md",
+  "prd_hash": "8ed2bd36fef28176790596045bfcebe9c70740ff",
+  "started_at": "2026-10-19T08:44:13.595450431Z",
+  "ended_at": "2026-10-19T08:44:13.649185068Z",
+  "totals": {
+    "passed": 1,
+    "passed_pending_review": 0,
+    "failed": 0,
+    "blocked_by_dependency": 0,
+    "wall_clock_ms": 0,
+    "tokens_in": 25523,
+    "tokens_out": 112,
+    "cost_usd_est": 0.0025,
+    "partial": false,
+    "tokens_partial": false,
+    "breakdown": {
+      "executor": {
+        "tokens_in": null,
+        "tokens_out": null,
+        "cost_usd_est": null
+      },
+      "transient": {
+        "tokens_in": null,
+        "tokens_out": null,
+        "cost_usd_est": null
+      },
+      "side_calls": {
+        "tokens_in": 25523,
+        "tokens_out": 112,
+        "cost_usd_est": 0.0025
+      }
+    }
+  },
+  "tasks": [
+    {
+      "id": "task-01",
+      "title": "the live list carries the zurdo seed link",
+      "category": "Uncategorized",
+      "status": "passed",
+      "attempts_used": 0,
+      "max_attempts": 3,
+      "wall_clock_ms": 0,
+      "criteria_passed_final": 0,
+      "criteria_total": 2,
+      "tokens_in": null,
+      "tokens_out": null,
+      "cost_usd_est": null,
+      "partial": true,
+      "tokens_partial": false,
+      "iterations": [],
+      "passed_at_preflight": true
+    }
+  ],
+  "hotspots": [],
+  "model_usage": [
+    {
+      "provider": "anthropic",
+      "model": "claude-haiku-5-5",
+      "iteration_count": 0,
+      "tokens_in": 25523,
+      "tokens_out": 112,
+      "cost_usd_est": 0.0025
+    }
+  ],
+  "stalled": [],
+  "categories": null
+}

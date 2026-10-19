@@ -1,0 +1,41 @@
+# Task
+
+serve command, seed data and live checks
+
+Add a `serve` subcommand to `cmd/shortlink`. Use the `flag` package for its
+flags, with `--addr` defaulting to `127.0.0.1:8787` and `--data` defaulting to
+`links.json`. It calls `server.New(data)`. If that fails, it prints the error,
+including the data path, to stderr and exits 1. Otherwise it runs
+`http.ListenAndServe(addr, handler)`. Keep whatever `cmd/shortlink` already
+does (e.g. version output), and keep `cmd/shortlink/main_test.go` passing.
+
+Create `testdata/seed.json` in the store's file format (a JSON array of
+`{"slug","url"}` objects) holding the two seed links listed under req-seed.
+
+The live checks run against the dev server that `scripts/devserver.sh` serves
+from the newest tree on `http://127.0.0.1:8787`. Do not start another server
+on that port, and do not modify `scripts/devserver.sh`.
+
+# Acceptance Criteria
+
+- serve with an unreadable data file exits 1 and names the path [shell: bin="$(mktemp -d)/shortlink" && go build -o "$bin" ./cmd/shortlink && { out="$(timeout 10 "$bin" serve --addr 127.0.0.1:0 --data testdata 2>&1)"; code=$?; test "$code" -eq 1 && printf '%s' "$out" | grep -q testdata; }]
+- the live dev server is healthy [http: GET http://127.0.0.1:8787/healthz -> 200 contains "ok"]
+- the live list carries the zurdo seed link [http: GET http://127.0.0.1:8787/api/links -> 200 contains "\"slug\":\"zurdo\""]
+- the live server reads the carol seed link and 404s an unknown slug [http: GET http://127.0.0.1:8787/api/links/carol -> 200 contains "https://github.com/ElOrlis/carol"] [http: GET http://127.0.0.1:8787/api/links/nope -> 404]
+- the live server redirects /zurdo without following it [shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://127.0.0.1:8787/zurdo | grep -qx '302 https://github.com/ElOrlis/zurdo']
+- the tree is gofmt-clean, vets clean and the full suite passes with pre-authored tests included [shell: test -z "$(gofmt -l .)" && go vet ./... && go vet -tags=preauthored ./... && go test -tags=preauthored -count=1 ./...]
+
+# Available Skills
+
+(none)
+
+# Lessons From Previous Runs
+
+Lessons distilled from earlier runs in this repository may apply here; verify each against the code before acting on it.
+
+- `zurdo analyze` (1.30.1) flags a `[shell:]` hint of the form `test "$(curl …)" = "…"` as a no-op, even though it compares real output. Pipe the command into an exact-line match instead: `[shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' <url> | grep -qx '302 <target>']`. It expresses the same check, exits non-zero when the output differs (including against a dead server), and clears the lint.
+  (learned in task-03 of prd-01-link-store-and-http-api)
+
+# Instructions
+
+Make the changes needed to satisfy all acceptance criteria. When you believe you are done, exit cleanly.

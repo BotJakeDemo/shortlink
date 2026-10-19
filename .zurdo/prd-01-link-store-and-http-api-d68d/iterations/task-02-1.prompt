@@ -1,0 +1,47 @@
+# Task
+
+HTTP routes over the store
+
+Implement `server.New(dataPath string) (http.Handler, error)` in
+`internal/server/server.go`. The stub currently panics with `todo: task-02`.
+`New` opens the `internal/store` store at `dataPath` and returns its error
+unchanged if the file is unreadable. It returns an `http.ServeMux` that uses
+Go 1.22 method+pattern routes:
+
+- `GET /healthz` → `200`, body `ok`.
+- `POST /api/links` with body `{"url": "...", "slug": "optional"}` → `201` and the link as JSON. Map `store.ErrInvalidURL` and `store.ErrInvalidSlug` to `400`, `store.ErrSlugTaken` to `409`, and a body that is not JSON to `400`.
+- `GET /api/links` → `200`, a JSON array of every link sorted by slug.
+- `GET /api/links/{slug}` → `200` and the link, or `404`.
+- `GET /{slug}` → `302` with `Location` set to the link's URL, or `404`.
+
+Write compact JSON with `encoding/json` (`{"slug":"zurdo","url":"…"}`, no
+indentation) and set `Content-Type: application/json` on every `/api/links`
+response, errors included. Every 4xx under `/api/links` (400, 404, 409) has
+the body `{"error": "<message>"}`, per the §4 convention phase 2's client
+relies on. The `GET /{slug}` 404 may stay plain text.
+
+The tests in `internal/server/preauthored_task_02_test.go` are evidence, not
+scratch. Do not delete them, weaken their assertions, or change what they
+assert. The only edit this task may make to that file is removing the
+`//go:build preauthored` line (and the blank line after it) once the behavior
+is implemented.
+
+# Acceptance Criteria
+
+- every route returns its specified status, body and Location under httptest, with JSON content type and `{"error"}` bodies on API errors [shell: go test -tags=preauthored -run '^TestServerRoutes$' -count=1 ./internal/server/]
+- the list is a sorted JSON array, empty when the data file is missing, and API-created links survive a reopen [shell: go test -tags=preauthored -run '^TestServer(List|CreatePersists)$' -count=1 ./internal/server/]
+- the pre-authored server tests are no longer build-tagged [no-grep: //go:build preauthored in internal/server/preauthored_task_02_test.go]
+
+# Evidence Paths
+
+These files are named by this task's acceptance criteria.
+
+  internal/server/preauthored_task_02_test.go    exists
+
+# Available Skills
+
+(none)
+
+# Instructions
+
+Make the changes needed to satisfy all acceptance criteria. When you believe you are done, exit cleanly.

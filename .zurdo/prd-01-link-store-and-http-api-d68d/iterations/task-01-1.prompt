@@ -1,0 +1,47 @@
+# Task
+
+JSON-file link store
+
+Implement the link store in `internal/store/store.go`. The file already holds
+the signature stubs (`Link`, `ErrInvalidURL`, `ErrInvalidSlug`, `ErrSlugTaken`,
+`Store`, `Open`, `Create`, `Get`, `List`). Each stub currently panics with
+`todo: task-01`. Replace those bodies and add whatever fields `Store` needs.
+Keep the exported signatures as they are.
+
+- The data file is a JSON array of link objects, e.g.
+  `[{"slug":"zurdo","url":"https://github.com/ElOrlis/zurdo"}]`. `Link` stays
+  exactly `{slug, url}` for this phase (design §4: fields arrive with the
+  phase that observes them).
+- A slug must match `^[a-z0-9-]{3,32}$` (`docs/shortlink/design/shortlink.md` §4).
+  A generated slug is 6 lowercase letters/digits and must not collide with an
+  existing one.
+- Writes save the whole file. Write to a temp file in the same directory and
+  rename it over the original. Guard the store with a mutex, because the HTTP
+  server calls it concurrently.
+- Standard library only (Go 1.22).
+
+The tests in `internal/store/preauthored_task_01_test.go` are evidence, not
+scratch. Do not delete them, weaken their assertions, or change what they
+assert. The only edit this task may make to that file is removing the
+`//go:build preauthored` line (and the blank line after it) once the behavior
+is implemented.
+
+# Acceptance Criteria
+
+- Create validates URLs and slugs against the pattern and its length bounds, rejects taken slugs, generates 6-character slugs and stores nothing on rejection [shell: go test -tags=preauthored -run '^TestStoreCreate$' -count=1 ./internal/store/]
+- a missing file opens empty, an unreadable or malformed file errors, and a saved file reloads to the same sorted links [shell: go test -tags=preauthored -run '^TestStore(OpenMissing|OpenUnreadable|Reload)$' -count=1 ./internal/store/]
+- the pre-authored store tests are no longer build-tagged [no-grep: //go:build preauthored in internal/store/preauthored_task_01_test.go]
+
+# Evidence Paths
+
+These files are named by this task's acceptance criteria.
+
+  internal/store/preauthored_task_01_test.go    exists
+
+# Available Skills
+
+(none)
+
+# Instructions
+
+Make the changes needed to satisfy all acceptance criteria. When you believe you are done, exit cleanly.
