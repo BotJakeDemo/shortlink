@@ -11,10 +11,11 @@ against the dev server on `127.0.0.1:8787`.
 ## Task: task-01 — JSON-file link store
 **Effort**: medium
 **Depends-on**: []
+**Frozen**: internal/server/preauthored_task_02_test.go
 
 ### Requirements
 
-- req-create: `Create` adds a link only when the URL is absolute `http`/`https` and the slug matches the slug pattern and is not taken. Otherwise it returns `ErrInvalidURL`, `ErrInvalidSlug` or `ErrSlugTaken` and stores nothing. An empty slug gets a generated one.
+- req-create: `Create` adds a link only when the URL is absolute `http`/`https` and the slug matches `^[a-z0-9-]{3,32}$` and is not taken. Otherwise it returns `ErrInvalidURL`, `ErrInvalidSlug` or `ErrSlugTaken` and stores nothing. An empty slug gets a generated one of 6 lowercase letters/digits.
 - req-persist: `Open` on a missing file starts an empty store. On a directory or malformed JSON it returns an error. Every successful `Create` saves the file, a reopened file lists the same links, and `List` sorts by slug.
 
 ### Description
@@ -28,8 +29,9 @@ Keep the exported signatures as they are.
 - The data file is a JSON array of link objects, e.g.
   `[{"slug":"zurdo","url":"https://github.com/ElOrlis/zurdo"}]`. `Link` stays
   exactly `{slug, url}` for this phase.
-- A slug must match the slug pattern in `docs/shortlink/design/shortlink.md` §4.
-  A generated slug must match it too, and must not collide with an existing one.
+- A slug must match `^[a-z0-9-]{3,32}$` (`docs/shortlink/design/shortlink.md` §4).
+  A generated slug is 6 lowercase letters/digits and must not collide with an
+  existing one.
 - Writes save the whole file. Write to a temp file in the same directory and
   rename it over the original. Guard the store with a mutex, because the HTTP
   server calls it concurrently.
@@ -43,7 +45,7 @@ is implemented.
 
 ### Acceptance Criteria
 
-- [ ] Create validates URLs and slugs, rejects taken slugs, generates missing slugs and stores nothing on rejection [shell: go test -tags=preauthored -run '^TestStoreCreate$' -count=1 ./internal/store/] [proves: req-create]
+- [ ] Create validates URLs and slugs against the pattern and its length bounds, rejects taken slugs, generates 6-character slugs and stores nothing on rejection [shell: go test -tags=preauthored -run '^TestStoreCreate$' -count=1 ./internal/store/] [proves: req-create]
 - [ ] a missing file opens empty, an unreadable or malformed file errors, and a saved file reloads to the same sorted links [shell: go test -tags=preauthored -run '^TestStore(OpenMissing|OpenUnreadable|Reload)$' -count=1 ./internal/store/] [proves: req-persist]
 - [ ] the pre-authored store tests are no longer build-tagged [no-grep: //go:build preauthored in internal/store/preauthored_task_01_test.go] [proves: req-create, req-persist]
 
@@ -55,6 +57,7 @@ is implemented.
 ### Requirements
 
 - req-routes: `GET /healthz` returns 200 with `ok`. `POST /api/links` returns 201 and the link, or 400 for a bad URL, slug or body, or 409 for a taken slug. `GET /api/links/{slug}` returns 200 and the link, or 404. `GET /{slug}` returns 302 with `Location` set to the URL, or 404.
+- req-json: every `/api/links` response carries `Content-Type: application/json`, and every 4xx from it has the body `{"error": "<message>"}` with a non-empty message.
 - req-list: `GET /api/links` returns 200 and a JSON array (`[]` when empty, never `null`) of every link, sorted by slug.
 - req-persist-api: a link created through the API is still there after the data file is reopened.
 
@@ -73,7 +76,10 @@ Go 1.22 method+pattern routes:
 - `GET /{slug}` → `302` with `Location` set to the link's URL, or `404`.
 
 Write compact JSON with `encoding/json` (`{"slug":"zurdo","url":"…"}`, no
-indentation) and set `Content-Type: application/json`.
+indentation) and set `Content-Type: application/json` on every `/api/links`
+response, errors included. Every 4xx under `/api/links` (400, 404, 409) has
+the body `{"error": "<message>"}`, per the §4 convention phase 2's client
+relies on. The `GET /{slug}` 404 may stay plain text.
 
 The tests in `internal/server/preauthored_task_02_test.go` are evidence, not
 scratch. Do not delete them, weaken their assertions, or change what they
@@ -83,14 +89,14 @@ is implemented.
 
 ### Acceptance Criteria
 
-- [ ] every route returns its specified status, body and Location under httptest [shell: go test -tags=preauthored -run '^TestServerRoutes$' -count=1 ./internal/server/] [proves: req-routes]
+- [ ] every route returns its specified status, body and Location under httptest, with JSON content type and `{"error"}` bodies on API errors [shell: go test -tags=preauthored -run '^TestServerRoutes$' -count=1 ./internal/server/] [proves: req-routes, req-json]
 - [ ] the list is a sorted JSON array, empty when the data file is missing, and API-created links survive a reopen [shell: go test -tags=preauthored -run '^TestServer(List|CreatePersists)$' -count=1 ./internal/server/] [proves: req-list, req-persist-api]
-- [ ] the pre-authored server tests are no longer build-tagged [no-grep: //go:build preauthored in internal/server/preauthored_task_02_test.go] [proves: req-routes, req-list, req-persist-api]
+- [ ] the pre-authored server tests are no longer build-tagged [no-grep: //go:build preauthored in internal/server/preauthored_task_02_test.go] [proves: req-routes, req-json, req-list, req-persist-api]
 
 ## Task: task-03 — serve command, seed data and live checks
 **Effort**: low
 **Depends-on**: [task-02]
-**Frozen**: scripts/devserver.sh, internal/server/preauthored_task_02_test.go
+**Frozen**: scripts/devserver.sh, internal/store/preauthored_task_01_test.go, internal/server/preauthored_task_02_test.go
 
 ### Requirements
 
@@ -121,5 +127,5 @@ on that port, and do not modify `scripts/devserver.sh`.
 - [ ] the live dev server is healthy [http: GET http://127.0.0.1:8787/healthz -> 200 contains "ok"] [proves: req-serve]
 - [ ] the live list carries the zurdo seed link [http: GET http://127.0.0.1:8787/api/links -> 200 contains "\"slug\":\"zurdo\""] [proves: req-seed]
 - [ ] the live server reads the carol seed link and 404s an unknown slug [http: GET http://127.0.0.1:8787/api/links/carol -> 200 contains "https://github.com/ElOrlis/carol"] [http: GET http://127.0.0.1:8787/api/links/nope -> 404] [proves: req-seed]
-- [ ] the live server redirects /zurdo without following it [shell: test "$(curl -s -o /dev/null -w '%{http_code} %{redirect_url}' http://127.0.0.1:8787/zurdo)" = "302 https://github.com/ElOrlis/zurdo"] [proves: req-redirect]
+- [ ] the live server redirects /zurdo without following it [shell: curl -s -o /dev/null -w '%{http_code} %{redirect_url}\n' http://127.0.0.1:8787/zurdo | grep -qx '302 https://github.com/ElOrlis/zurdo'] [proves: req-redirect]
 - [ ] the tree is gofmt-clean, vets clean and the full suite passes with pre-authored tests included [shell: test -z "$(gofmt -l .)" && go vet ./... && go vet -tags=preauthored ./... && go test -tags=preauthored -count=1 ./...] [proves: req-clean]

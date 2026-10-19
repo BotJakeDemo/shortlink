@@ -1,31 +1,31 @@
-> drafted by `zurdo scaffold` from `docs/shortlink/design/shortlink.md` §Phase 1 — link store and HTTP API
+> reviewed by the `zurdo-prd-author` skill (phase-01-h2, 2026-10-19) from the `zurdo scaffold` draft of `docs/shortlink/design/shortlink.md` §Phase 1 — verdict pending one open question (below); the scaffold marker stays until it is answered.
 
 # Trail: prd-01-link-store-and-http-api
 
 ## Decisions
 
-- **Split into three tasks** along the verification surface: the store (unit tests), the routes (httptest), and the command plus seed data (live dev server). Each task's evidence depends only on what the earlier tasks produce.
-- **task-02 depends on task-01** because `server.New` opens the store. **task-03 depends on task-02** because `serve` calls `server.New`. Both edges are real data dependencies.
-- **Store API pinned by stub** (`Open`/`Create`/`Get`/`List`, three sentinel errors). The pre-authored tests can then name symbols and still compile at the PRD commit.
-- **`server.New(dataPath string) (http.Handler, error)`** takes a path, not a `*store.Store`. The server stub then doesn't need to import `internal/store`, so the stubs compile without depending on the module path in `go.mod`. The cost is that `server` owns opening the store.
-- **Data-file format is a JSON array of `{slug, url}`.** The server test seeds it directly, and `testdata/seed.json` uses the same shape. `Link` stays exactly two fields: `TestStoreReload` uses `reflect.DeepEqual` across a JSON round trip, which an added timestamp would break.
-- **Compact JSON is required.** The live criterion matches `"slug":"zurdo"` byte-exactly, so the task-02 Description forbids indentation.
-- **Location is asserted only on 302s.** A 201 that also sets `Location` is legitimate REST and should not fail.
-- **Two hints on one criterion for 404-on-nope.** `GET /api/links/nope -> 404` alone could pass against any server that 404s everything. AND'ing it with the carol 200 removes that tautology.
-- **The unreadable-file shell check also greps for the path.** Exit 1 alone could pass pre-run if the current `main` exits 1 on an unknown subcommand. The `timeout 10` turns a server that keeps listening into a failure instead of a hang.
-- **The full-suite criterion runs with `-tags=preauthored`.** The untagged `gofmt`/`vet`/`test` trio already passes on the PRD commit (tautology). Including the tagged files makes it red until both pre-authored suites pass.
-- **Frozen paths:** task-02 freezes task-01's test file, and task-03 freezes task-02's test file and `scripts/devserver.sh`. None of these overlaps a same-task evidence path. Per-task baselines (v1.13.1+) keep the earlier tasks' writes from counting as violations.
-- **Effort keys** `medium`/`medium`/`low` assume the shipped `low|medium|high` defaults. Check them against `[effort_map.<provider>]` in `.zurdo/config.toml` before `zurdo run`.
+- **Three tasks along the verification surface** (confirmed): the store (unit tests), the routes (httptest), and the command plus seed data (live dev server). Each task's evidence depends only on what the earlier tasks produce.
+- **task-02 depends on task-01** because `server.New` opens the store. **task-03 depends on task-02** because `serve` calls `server.New`. Both edges are real data dependencies (confirmed).
+- **Store API pinned by stub** (`Open`/`Create`/`Get`/`List`, three sentinel errors), so the pre-authored tests name symbols and still compile at the PRD commit (confirmed).
+- **`server.New(dataPath string) (http.Handler, error)`** takes a path, so the server stub compiles without importing `internal/store`. The cost is that `server` owns opening the store (confirmed).
+- **Slug rules are spelled out and asserted.** The draft deferred to "the §4 pattern" and only checked that a generated slug was non-empty, so a 1-character generator or a pattern without length bounds would have passed. The review added the literal `^[a-z0-9-]{3,32}$` and the 6-character generated-slug rule to req-create and the Description, and added test cases: a hyphenated slug (accepted), `ab`, a 33-character slug and `Zurdo` (all rejected), and a `^[a-z0-9]{6}$` match on the generated slug.
+- **New req-json: the §4 error and content-type convention.** Design §4 makes `{"error": "<message>"}` with a 4xx status and `Content-Type: application/json` conventions that every phase keeps, and phase 2's client prints the server's error. The draft asserted neither. `TestServerRoutes` now checks the JSON content type on every `/api/` case and a non-empty `error` field on every `/api/` 4xx. The `GET /{slug}` 404 is left unconstrained.
+- **Compact JSON is required** (confirmed). The live criterion matches `"slug":"zurdo"` byte-exactly.
+- **Location is asserted only on 302s** (confirmed). A 201 that also sets `Location` is legitimate REST.
+- **Two hints on one criterion for 404-on-nope** (confirmed). `GET /api/links/nope -> 404` alone passes against a server that 404s everything; AND'ing it with the carol 200 removes the tautology.
+- **The unreadable-file shell check greps for the path** (confirmed). Today's `main` exits 2 on `serve`, and its message does not contain `testdata`. `timeout 10` turns a server that keeps listening into a failure instead of a hang.
+- **The redirect check is a pipe into `grep -qx`.** `zurdo analyze` flagged the draft's `test "$(curl …)" = "…"` as a no-op. The rewritten check, `curl … -w '%{http_code} %{redirect_url}\n' | grep -qx '302 https://github.com/ElOrlis/zurdo'`, clears the lint, and it exits 1 against the dead port today.
+- **The full-suite criterion runs with `-tags=preauthored`** (confirmed). The untagged trio already passes on the PRD commit (tautology).
+- **Frozen paths:** task-01 freezes task-02's test file, task-02 freezes task-01's, and task-03 freezes both plus `scripts/devserver.sh`. None of these overlaps a same-task evidence path, and per-task baselines (v1.13.1+; this repo runs zurdo 1.30.1) keep the earlier tasks' writes from counting. Advisory: `scripts/devserver.sh` must never change in any phase. Add it to `[verification] protected_paths` in `.zurdo/config.toml` rather than freezing it per task in later PRDs.
+- **Accepted and unverified: the mutex and the temp-file-and-rename write.** No phase-1 criterion can observe a lost write or a torn file cheaply. Phase 3's 100-concurrent-redirects test under `-race` is where concurrency is proven.
+- **Effort keys** `medium`/`medium`/`low` (confirmed). `.zurdo/config.toml` maps all three keys for every provider.
 
-## Open assumptions to check before committing
+## Open question (blocks the ready verdict)
 
-- `docs/shortlink/design/shortlink.md` §4 names the packages `internal/store` and `internal/server`. If it names them differently, rename the stubs, the tests and the hints together.
-- The §4 slug pattern accepts the lowercase 4–9 character slugs the tests use (`zurdo`, `carol`, `bravo`, `plainhttp`, `taken`, `newone`, `kept`, `badurl`, `ftpfile`, `relative`, `emptyurl`) and rejects `has space` and `a/b`.
-- `scripts/devserver.sh` runs `shortlink serve` with `--data` pointing at `testdata/seed.json` (or a copy of it) on `127.0.0.1:8787`.
-- `zurdo analyze --static-only docs/shortlink/prds/prd-01-link-store-and-http-api.md` has not been run in this authoring pass. Run it and clear any `[error]` findings.
+- **`Link` shape vs design §4.** The PRD pins `Link` to exactly `{slug, url}`. Design §4, decided with the maintainer, says `Link` is `{slug, url, created_at, clicks}`. The draft's only reason was that `TestStoreReload` compares with `reflect.DeepEqual`. Recommended: keep `{slug, url}` in phase 1, and amend §4 so that fields arrive with the phase that observes them: `clicks` (and phase 3's `last_clicked_at`) in phase 3, with `created_at` dropped because no phase reads it. If the maintainer wants `created_at` now instead, task-01 gains a requirement that `Create` stamps it and that it survives a reload. `TestStoreReload` then compares slug and URL rather than whole structs, and `testdata/seed.json` carries timestamps.
 
 ## Pre-authored tests
 
-- **task-01** — `internal/store/preauthored_task_01_test.go`, 4 tests. Pre-run: `go test -tags=preauthored -run '^TestStoreCreate$' -count=1 ./internal/store/` → **failed on assertion**
-- **task-02** — `internal/server/preauthored_task_02_test.go`, 3 tests. Pre-run: `go test -tags=preauthored -run '^TestServerRoutes$' -count=1 ./internal/server/` → **failed on assertion**
-- **task-03** — **declined.** No pre-authored test in this draft.
+- **task-01** — `internal/store/preauthored_task_01_test.go`, 4 tests. Negative cases: relative, `ftp` and empty URLs; slugs with a space or a slash, too short, too long or uppercase; a taken slug; a directory or malformed file on `Open`. Pre-run: `go test -tags=preauthored -run '^TestStoreCreate$' -count=1 ./internal/store/` → **failed on assertion** (`todo: task-01` panic). Satisfiability was checked against a throwaway reference store, which passed all 4 tests; a 4-character generator failed `TestStoreCreate`.
+- **task-02** — `internal/server/preauthored_task_02_test.go`, 3 tests. Negative cases: unknown slug on both read routes, a non-URL, an `ftp` URL, a taken slug, a bad slug, a malformed body, and plain-text error bodies. Pre-run: `go test -tags=preauthored -run '^TestServerRoutes$' -count=1 ./internal/server/` → **failed on assertion** (`todo: task-02` panic). The throwaway reference server passed all 3 tests; swapping its JSON errors for `http.Error` failed 12 assertions.
+- **task-03** — **declined.** Its behavior is the `serve` process and the live dev server, which the `[shell:]` and `[http:]` criteria exercise directly. A Go test would duplicate the store/server tests.

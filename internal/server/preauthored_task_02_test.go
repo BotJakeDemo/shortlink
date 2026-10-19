@@ -84,6 +84,20 @@ func TestServerRoutes(t *testing.T) {
 					t.Errorf("Location = %q, want %q", got, tt.wantLocation)
 				}
 			}
+			if !strings.HasPrefix(tt.target, "/api/") {
+				return
+			}
+			if got := rec.Header().Get("Content-Type"); !strings.HasPrefix(got, "application/json") {
+				t.Errorf("Content-Type = %q, want application/json", got)
+			}
+			if tt.wantStatus >= 400 {
+				var e struct {
+					Error string `json:"error"`
+				}
+				if err := json.Unmarshal(rec.Body.Bytes(), &e); err != nil || e.Error == "" {
+					t.Errorf("error body %q is not {\"error\": \"<message>\"}", rec.Body.String())
+				}
+			}
 		})
 	}
 }

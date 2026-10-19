@@ -10,6 +10,8 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"regexp"
+	"strings"
 	"testing"
 )
 
@@ -23,13 +25,18 @@ func TestStoreCreate(t *testing.T) {
 		{"explicit slug", "https://github.com/ElOrlis/zurdo", "zurdo", nil},
 		{"http url", "http://example.com/a?b=c", "plainhttp", nil},
 		{"generated slug", "https://example.com/", "", nil},
+		{"hyphenated slug", "https://example.com/h", "my-link", nil},
 		{"taken slug", "https://example.com/other", "taken", ErrSlugTaken},
 		{"relative url", "/just/a/path", "relative", ErrInvalidURL},
 		{"ftp url", "ftp://example.com/file", "ftpfile", ErrInvalidURL},
 		{"empty url", "", "emptyurl", ErrInvalidURL},
 		{"slug with space", "https://example.com/", "has space", ErrInvalidSlug},
 		{"slug with slash", "https://example.com/", "a/b", ErrInvalidSlug},
+		{"slug too short", "https://example.com/", "ab", ErrInvalidSlug},
+		{"slug too long", "https://example.com/", strings.Repeat("a", 33), ErrInvalidSlug},
+		{"uppercase slug", "https://example.com/", "Zurdo", ErrInvalidSlug},
 	}
+	generated := regexp.MustCompile(`^[a-z0-9]{6}$`)
 	s, err := Open(filepath.Join(t.TempDir(), "links.json"))
 	if err != nil {
 		t.Fatal(err)
@@ -52,17 +59,17 @@ func TestStoreCreate(t *testing.T) {
 			if tt.slug != "" && got.Slug != tt.slug {
 				t.Errorf("Slug = %q, want %q", got.Slug, tt.slug)
 			}
-			if got.Slug == "" {
-				t.Errorf("Slug is empty, want a generated slug")
+			if tt.slug == "" && !generated.MatchString(got.Slug) {
+				t.Errorf("generated Slug = %q, want 6 lowercase letters/digits", got.Slug)
 			}
 			if stored, ok := s.Get(got.Slug); !ok || stored != got {
 				t.Errorf("Get(%q) = %v, %v; want %v, true", got.Slug, stored, ok, got)
 			}
 		})
 	}
-	// taken + the three successful creates; rejected creates must not be stored.
-	if got := len(s.List()); got != 4 {
-		t.Errorf("len(List()) = %d, want 4", got)
+	// taken + the four successful creates; rejected creates must not be stored.
+	if got := len(s.List()); got != 5 {
+		t.Errorf("len(List()) = %d, want 5", got)
 	}
 }
 
