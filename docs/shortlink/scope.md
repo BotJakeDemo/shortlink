@@ -21,7 +21,7 @@ Done when every phase is `done`, each having gone from `carol:accepted` on its p
 
 | Phase | Title | PRD | Status | Depends on | Design |
 |-------|-------|-----|--------|------------|--------|
-| phase-01 | Link store and HTTP API | | ready | | design/shortlink.md#Phase 1 — link store and HTTP API |
+| phase-01 | Link store and HTTP API | docs/shortlink/prds/prd-01-link-store-and-http-api.md | running | | design/shortlink.md#Phase 1 — link store and HTTP API |
 | phase-02 | CLI client | | ready | phase-01 | design/shortlink.md#Phase 2 — CLI client |
 | phase-03 | Click stats | | ready | phase-02 | design/shortlink.md#Phase 3 — click stats |
 
